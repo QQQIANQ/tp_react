@@ -1,26 +1,43 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import AddBeerForm from './AddBeerForm';
+import BeerList from './BeerList';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+
+const initialBeers : Array<Beer> = [
+  {text:"Corona  ", like : true},
+  {text:"QingDao  ", like : false}
+]
+
+const App : React.FC = ()=>{
+
+  const [beers,setBeers] = useState(initialBeers);
+
+  const toggleBeer:ToggleBeer = selectedBeer =>{ 
+    const newBeers = beers.map(beer =>{
+      if(beer === selectedBeer){
+        return {
+          ...beer,
+          like: !beer.like
+        };
+      }
+      return beer;
+    });
+    setBeers(newBeers);
+  };
+
+ const addBeer : AddBeer = newBeer =>{
+   newBeer.trim()!=""&& 
+   setBeers([...beers,{text : newBeer, like : false}]);
+ }
+  
+
+  return<div>
+            <h1>Want some beers?</h1>
+           < React.Fragment>
+           <AddBeerForm addBeer={addBeer}/>
+           <BeerList beers = {beers} toggleBeer={toggleBeer}/>
+           </React.Fragment>
+          </div>;   
+};
 
 export default App;
